@@ -8,7 +8,7 @@ export type ServerType = { name: string; type: string; content: string };
   styleUrls: ['./server-element.component.scss'],
 })
 export class ServerElementComponent implements OnInit {
-  @Input() element: ServerType;
+  @Input('srvElement') element: ServerType;
 
   constructor() {}
 
