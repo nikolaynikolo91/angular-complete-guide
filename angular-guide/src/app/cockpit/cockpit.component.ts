@@ -7,7 +7,7 @@ import { EventData } from '../app.component';
 })
 export class CockpitComponent implements OnInit {
  @Output() serverCreated = new EventEmitter<EventData>();
- @Output() blueprintCreated = new EventEmitter<EventData>();
+ @Output('bpCreated') blueprintCreated = new EventEmitter<EventData>();
   newServerName = '';
   newServerContent = '';
 
