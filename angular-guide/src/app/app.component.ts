@@ -6,10 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'angular-guide';
-  navigateTo = '';
-
-  onNavigate(feature: string) {
-    this.navigateTo = feature;
-  }
+  numbers = [1, 2, 3, 4, 5];
+  onlyOdd = false;
 }
