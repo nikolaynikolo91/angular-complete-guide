@@ -7,9 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-guide';
-  navigateTo = '';
-
-  onNavigate(feature: string) {
-    this.navigateTo = feature;
-  }
 }
