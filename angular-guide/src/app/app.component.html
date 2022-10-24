@@ -45,6 +45,15 @@
             <option value="pet">Your first Pet?</option>
             <option value="teacher">Your first teacher?</option>
           </select>
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              [(ngModel)]="answer"
+              name="questionAnswer"
+              rows="3"
+            ></textarea>
+          </div>
+          <p>Your reply: {{ answer }}</p>
         </div>
         <button [disabled]="!f.valid" class="btn btn-primary" type="submit">
           Submit
