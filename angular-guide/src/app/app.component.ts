@@ -19,11 +19,17 @@ export class AppComponent implements OnInit {
           Validators.required,
           this.checkForbiddenNames.bind(this),
         ]),
-        email: new FormControl(null, [Validators.required, Validators.email], [this.forbiddenEmails]),
+        email: new FormControl(
+          null,
+          [Validators.required, Validators.email],
+          [this.forbiddenEmails]
+        ),
       }),
       gender: new FormControl('male'),
       hobbies: new FormArray([new FormControl(null, Validators.required)]),
     });
+    this.signupForm.valueChanges.subscribe((value) => console.log(value));
+    this.signupForm.statusChanges.subscribe((status) => console.log(status));
   }
 
   onSubmit() {
