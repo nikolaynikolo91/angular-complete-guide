@@ -38,11 +38,16 @@ export class ShoppingEditComponent implements OnInit {
         newIngredient
       );
     } else this.shoppingListService.addIngredient(newIngredient);
-    this.onClear()
+    this.onClear();
   }
 
   onClear() {
     this.form.reset();
     this.editMode = false;
+  }
+
+  onDelete() {
+    this.onClear()
+    this.shoppingListService.deleteIngredients(this.editedItemIndex);
   }
 }
