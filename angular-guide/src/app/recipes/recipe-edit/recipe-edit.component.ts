@@ -22,7 +22,7 @@ export class RecipeEditComponent implements OnInit {
     this.routre.params.subscribe((params: Params) => {
       this.id = +params['id'];
       this.editMode = !!params['id'];
-      this.initForm()
+      this.initForm();
     });
   }
 
@@ -43,5 +43,9 @@ export class RecipeEditComponent implements OnInit {
       imagePath: new FormControl(recipeImagePath),
       description: new FormControl(recipeDescription),
     });
+  }
+
+  onSubmit() {
+    console.log(this.recipeForm);
   }
 }
