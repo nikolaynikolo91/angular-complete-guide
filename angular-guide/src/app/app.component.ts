@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs';
+import { Post } from './post.model';
 
 const BASE_URL =
   'https://ng-guilde-complete-default-rtdb.europe-west1.firebasedatabase.app/';
@@ -19,8 +21,10 @@ export class AppComponent implements OnInit {
     this.fetchPosts();
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
-    this.http.post(BASE_URL + POSTS + URL_END, postData).subscribe(console.log);
+  onCreatePost(postData: Post) {
+    this.http
+      .post<{ name: string }>(BASE_URL + POSTS + URL_END, postData)
+      .subscribe(console.log);
   }
 
   onFetchPosts() {
@@ -32,6 +36,19 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.http.get(BASE_URL + POSTS + URL_END).subscribe(console.log);
+    this.http
+      .get<{ [key: string]: Post }>(BASE_URL + POSTS + URL_END)
+      .pipe(
+        map((resData) => {
+          const postsArray: Post[] = [];
+          for (const key in resData) {
+            if (resData.hasOwnProperty(key)) {
+              postsArray.push({ ...resData[key], id: key });
+            }
+          }
+          return postsArray;
+        })
+      )
+      .subscribe((res) => console.log(res));
   }
 }
