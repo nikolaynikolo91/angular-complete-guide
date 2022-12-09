@@ -14,6 +14,7 @@ const URL_END = '.json';
 })
 export class AppComponent implements OnInit {
   loadedPosts = [];
+  isLoading = false;
 
   constructor(private http: HttpClient) {}
 
@@ -36,6 +37,7 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
+    this.isLoading = true;
     this.http
       .get<{ [key: string]: Post }>(BASE_URL + POSTS + URL_END)
       .pipe(
@@ -49,6 +51,9 @@ export class AppComponent implements OnInit {
           return postsArray;
         })
       )
-      .subscribe((posts) => (this.loadedPosts = posts));
+      .subscribe((posts) => {
+        this.isLoading = false;
+        this.loadedPosts = posts;
+      });
   }
 }
