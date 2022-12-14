@@ -41,7 +41,10 @@ export class AppComponent implements OnInit {
         this.loadedPosts = post;
       },
       error: (error) => {
+        console.log('yes')
+        this.isLoading = false;
         this.error = error.message;
+        console.log(error, 'error')
       },
     });
   }
@@ -50,5 +53,9 @@ export class AppComponent implements OnInit {
     this.postService.deletePosts().subscribe(() => {
       this.loadedPosts = [];
     });
+  }
+  onHandleError(){
+    this.error = null;
+    this.isLoading = false
   }
 }
