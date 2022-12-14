@@ -10,14 +10,20 @@ import { PostsService } from './posts.service';
 export class AppComponent implements OnInit {
   loadedPosts = [];
   isLoading = false;
+  error = null;
 
   constructor(private postService: PostsService) {}
 
   ngOnInit() {
     this.isLoading = true;
-    this.postService.fetchPosts().subscribe((post) => {
-      this.isLoading = false;
-      this.loadedPosts = post;
+    this.postService.fetchPosts().subscribe({
+      next: (post) => {
+        this.isLoading = false;
+        this.loadedPosts = post;
+      },
+      error: (error) => {
+        this.error = error.message;
+      },
     });
   }
 
@@ -29,15 +35,20 @@ export class AppComponent implements OnInit {
 
   onFetchPosts() {
     this.isLoading = true;
-    this.postService.fetchPosts().subscribe((post) => {
-      this.isLoading = false;
-      this.loadedPosts = post;
+    this.postService.fetchPosts().subscribe({
+      next: (post) => {
+        this.isLoading = false;
+        this.loadedPosts = post;
+      },
+      error: (error) => {
+        this.error = error.message;
+      },
     });
   }
 
   onClearPosts() {
-    this.postService.deletePosts().subscribe(()=> {
-      this.loadedPosts = []
-    })
+    this.postService.deletePosts().subscribe(() => {
+      this.loadedPosts = [];
+    });
   }
 }

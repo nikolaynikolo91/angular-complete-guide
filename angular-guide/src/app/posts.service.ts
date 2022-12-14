@@ -8,6 +8,7 @@ const BASE_URL =
 const POSTS = 'posts';
 const URL_END = '.json';
 
+
 @Injectable({ providedIn: 'root' })
 export class PostsService {
   constructor(private http: HttpClient) {}
