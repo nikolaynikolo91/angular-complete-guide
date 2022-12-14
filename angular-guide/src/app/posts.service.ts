@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, catchError } from 'rxjs';
 import { Post } from './post.model';
@@ -23,7 +23,9 @@ export class PostsService {
 
   fetchPosts() {
     return this.http
-      .get<{ [key: string]: Post }>(BASE_URL + POSTS + URL_END)
+      .get<{ [key: string]: Post }>(BASE_URL + POSTS + URL_END, {
+        headers: new HttpHeaders({ 'Custom-Header': 'Hello' }),
+      })
       .pipe(
         map((resData) => {
           const postsArray: Post[] = [];
