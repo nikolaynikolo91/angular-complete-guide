@@ -37,6 +37,7 @@ export class PostsService {
       .get<{ [key: string]: Post }>(BASE_URL + POSTS + URL_END, {
         headers: new HttpHeaders({ 'Custom-Header': 'Hello' }),
         params: new HttpParams().set('print', 'pretty'),
+        responseType: 'json'
         // params: searchParams
       })
       .pipe(
@@ -57,7 +58,10 @@ export class PostsService {
 
   deletePosts() {
     return this.http
-      .delete(BASE_URL + POSTS + URL_END, { observe: 'events' })
+      .delete(BASE_URL + POSTS + URL_END, {
+        observe: 'events',
+        responseType: 'text'
+      })
       .pipe(
         tap((event) => {
           console.log(event);
