@@ -1,6 +1,11 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEventType,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, catchError } from 'rxjs';
+import { map, catchError, tap } from 'rxjs';
 import { Post } from './post.model';
 
 const BASE_URL =
@@ -17,7 +22,8 @@ export class PostsService {
 
     return this.http.post<{ name: string }>(
       BASE_URL + POSTS + URL_END,
-      postData
+      postData,
+      { observe: 'response' }
     );
   }
 
@@ -30,7 +36,7 @@ export class PostsService {
     return this.http
       .get<{ [key: string]: Post }>(BASE_URL + POSTS + URL_END, {
         headers: new HttpHeaders({ 'Custom-Header': 'Hello' }),
-        params: new HttpParams().set('print', 'pretty')
+        params: new HttpParams().set('print', 'pretty'),
         // params: searchParams
       })
       .pipe(
@@ -50,6 +56,20 @@ export class PostsService {
   }
 
   deletePosts() {
-    return this.http.delete(BASE_URL + POSTS + URL_END);
+    return this.http
+      .delete(BASE_URL + POSTS + URL_END, { observe: 'events' })
+      .pipe(
+        tap((event) => {
+          console.log(event);
+
+          if (event.type === HttpEventType.Sent) {
+            //....
+          }
+
+          if (event.type === HttpEventType.Response) {
+            console.log(event.body);
+          }
+        })
+      );
   }
 }
