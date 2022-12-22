@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs';
 import { Recipe } from '../recipes/recipe.model';
 import { RecipeService } from '../recipes/recipe.service';
 
@@ -23,6 +24,16 @@ export class DataStorageService {
     this.http
       .get<Recipe[]>(
         'https://ng-guilde-complete-default-rtdb.europe-west1.firebasedatabase.app/recipes.json'
+      )
+      .pipe(
+        map((recipes: Recipe[]) => {
+          return recipes.map((recipe) => {
+            return {
+              ...recipe,
+              ingredients: recipe.ingredients ? recipe.ingredients : [],
+            };
+          });
+        })
       )
       .subscribe((recipes: Recipe[]) => {
         console.log(recipes);
