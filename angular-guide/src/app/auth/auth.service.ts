@@ -3,10 +3,9 @@ import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 
 const API_KEY = 'AIzaSyDKk_QQL8MmKqZbSePc9r0sSatToO6ABa0';
-const SIGNUP_URL =
-  'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
-const SIGNIN_URL =
-  'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=';
+const BASE_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:';
+const SIGNUP_URL = 'signUp?key=';
+const SIGNIN_URL = 'signInWithPassword?key=';
 
 const ERROR_MESSAGES: { [key: string]: string } = {
   EMAIL_EXISTS: 'This email exist already',
@@ -29,7 +28,7 @@ export class AuthService {
 
   signup(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>(SIGNUP_URL + API_KEY, {
+      .post<AuthResponseData>(BASE_URL + SIGNUP_URL + API_KEY, {
         email,
         password,
         returnSecureToken: true,
@@ -39,7 +38,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>(SIGNIN_URL + API_KEY, {
+      .post<AuthResponseData>(BASE_URL + SIGNIN_URL + API_KEY, {
         email,
         password,
         returnSecureToken: true,
