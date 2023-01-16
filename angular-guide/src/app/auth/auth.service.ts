@@ -15,7 +15,7 @@ interface AuthResponseData {
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  signuo(email: string, password: string) {
+  signup(email: string, password: string) {
     return this.http.post<AuthResponseData>(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' +
         API_KEY,
