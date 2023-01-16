@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 import { DataStorageService } from '../shared/data-storage.service';
 
 @Component({
@@ -6,13 +8,20 @@ import { DataStorageService } from '../shared/data-storage.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
-  // @Output() featureSelected = new EventEmitter<string>();
-  // onSelect(feat: string) {
-  //   this.featureSelected.emit(feat);
-  // }
+export class HeaderComponent implements OnInit, OnDestroy {
+  isAuthenticated = false;
 
-  constructor(private dataStoreService: DataStorageService) {}
+  private destroy = new Subject<void>();
+  constructor(
+    private dataStoreService: DataStorageService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.authService.user.pipe(takeUntil(this.destroy)).subscribe((user) => {
+      this.isAuthenticated = !!user;
+    });
+  }
 
   onSaveData() {
     this.dataStoreService.storeRecipes();
@@ -20,5 +29,10 @@ export class HeaderComponent {
 
   onFetchData() {
     this.dataStoreService.fetchRecipesData().subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }
