@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Subject, tap, throwError } from 'rxjs';
+import { User } from './user.model';
 
 const API_KEY = 'AIzaSyDKk_QQL8MmKqZbSePc9r0sSatToO6ABa0';
 const BASE_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:';
@@ -24,6 +25,7 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  user = new Subject<User>();
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string) {
@@ -33,7 +35,12 @@ export class AuthService {
         password,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap(({ email, expiresIn, idToken, localId }) =>
+          this.handleAuthentiocation(email, localId, idToken, +expiresIn)
+        )
+      );
   }
 
   login(email: string, password: string) {
@@ -43,7 +50,12 @@ export class AuthService {
         password,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap(({ email, expiresIn, idToken, localId }) =>
+          this.handleAuthentiocation(email, localId, idToken, +expiresIn)
+        )
+      );
   }
 
   private handleError({ error }: HttpErrorResponse) {
@@ -51,5 +63,16 @@ export class AuthService {
     if (message) {
       return throwError(() => new Error(message));
     } else return throwError(() => new Error('An unkown error occurd!'));
+  }
+
+  private handleAuthentiocation(
+    email: string,
+    userid: string,
+    token: string,
+    expiresIn: number
+  ) {
+    const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
+    const user = new User(email, userid, token, expirationDate);
+    this.user.next(user);
   }
 }
