@@ -8,12 +8,13 @@ const ERROR_MESSAGES: { [key: string]: string } = {
   EMAIL_EXISTS: 'This email exist already',
 };
 
-interface AuthResponseData {
+export interface AuthResponseData {
   idToken: string;
   email: string;
   refreshToken: string;
   expiresIn: string;
   localId: string;
+  registered?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,6 +25,27 @@ export class AuthService {
     return this.http
       .post<AuthResponseData>(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' +
+          API_KEY,
+        {
+          email,
+          password,
+          returnSecureToken: true,
+        }
+      )
+      .pipe(
+        catchError(({ error }) => {
+          const message = ERROR_MESSAGES[error.error.message];
+          if (message) {
+            throw message;
+          } else throw 'An unkown error occurd!';
+        })
+      );
+  }
+
+  login(email: string, password: string) {
+    return this.http
+      .post<AuthResponseData>(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' +
           API_KEY,
         {
           email,
