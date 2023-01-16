@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError,  tap, throwError } from 'rxjs';
 import { User } from './user.model';
 
 const API_KEY = 'AIzaSyDKk_QQL8MmKqZbSePc9r0sSatToO6ABa0';
@@ -19,13 +19,13 @@ export interface AuthResponseData {
   email: string;
   refreshToken: string;
   expiresIn: string;
-  localId: string;
+  localId: string; 
   registered?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string) {
