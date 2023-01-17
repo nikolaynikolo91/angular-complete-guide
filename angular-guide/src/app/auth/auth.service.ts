@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError,  tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
 import { User } from './user.model';
 
 const API_KEY = 'AIzaSyDKk_QQL8MmKqZbSePc9r0sSatToO6ABa0';
@@ -59,9 +59,33 @@ export class AuthService {
       );
   }
 
-  logout (){
+  logout() {
     this.user.next(null);
-    this.router.navigate(['/auth'])
+    this.router.navigate(['/auth']);
+  }
+
+  autoLogin() {
+    const userData: {
+      email: string;
+      userid: string;
+      _token: string;
+      _expirationDate: string;
+    } = JSON.parse(localStorage.getItem('userData'));
+
+    if (!userData) {
+      return;
+    }
+
+    const loadedUser = new User(
+      userData.email,
+      userData.userid,
+      userData._token,
+      new Date(userData._expirationDate)
+    );
+
+    if (loadedUser.token){
+      this.user.next(loadedUser)
+    }
   }
 
   private handleError({ error }: HttpErrorResponse) {
@@ -80,5 +104,6 @@ export class AuthService {
     const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
     const user = new User(email, userid, token, expirationDate);
     this.user.next(user);
+    localStorage.setItem('userData', JSON.stringify(user));
   }
 }
