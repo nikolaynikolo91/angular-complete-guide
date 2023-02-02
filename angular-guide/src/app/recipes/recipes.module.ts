@@ -19,19 +19,11 @@ import { RecipesComponent } from './recipes.component';
     RecipeStartComponent,
     RecipeEditComponent,
   ],
-  exports: [
-    RecipesComponent,
-    RecipesListComponent,
-    RecipesDetailComponent,
-    RecipesItemComponent,
-    RecipeStartComponent,
-    RecipeEditComponent,
-  ],
   imports: [
     RouterModule,
     CommonModule,
     ReactiveFormsModule,
-    RecipesRoutingModule
-  ]
+    RecipesRoutingModule,
+  ],
 })
 export class RecipesModule {}
