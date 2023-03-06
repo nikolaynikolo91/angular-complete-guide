@@ -11,5 +11,7 @@ import { ShoppingListService } from './shopping-list.service';
   declarations: [ShoppingListComponent, ShoppingEditComponent],
   imports: [CommonModule, ShoppingListRouterModule, FormsModule, SharedModule],
   providers: [ShoppingListService],
+  // providers: [LoggingService]
+  // separate instance of LoggingService
 })
 export class ShoppingListModule {}

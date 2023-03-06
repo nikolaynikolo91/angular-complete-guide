@@ -19,5 +19,7 @@ import { PlaceholderDirective } from './placeholder/placeholder.directive';
     DropdownDirective,
     LoadingSpinnerComponent,
   ],
+    // providers: [LoggingService]
+  // separate instance of LoggingService
 })
 export class SharedModule {}
