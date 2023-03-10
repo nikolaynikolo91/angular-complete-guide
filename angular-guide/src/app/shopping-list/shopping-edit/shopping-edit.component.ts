@@ -16,7 +16,10 @@ export class ShoppingEditComponent implements OnInit {
   editedIngredient: Ingredient;
   @ViewChild('f', { static: false }) form: NgForm;
 
-  constructor(private shoppingListService: ShoppingListService,  private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>) {}
+  constructor(
+    private shoppingListService: ShoppingListService,
+    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
+  ) {}
 
   ngOnInit(): void {
     this.shoppingListService.startedEditing.subscribe((index: number) => {
@@ -35,14 +38,20 @@ export class ShoppingEditComponent implements OnInit {
     const newIngredient = new Ingredient(name, amount);
 
     if (this.editMode) {
-      this.shoppingListService.updateIngredients(
-        this.editedItemIndex,
-        newIngredient
+      // this.shoppingListService.updateIngredients(
+      //   this.editedItemIndex,
+      //   newIngredient
+      // );
+      this.store.dispatch(
+        new ShoppingListActions.UpdateIngredients({
+          index: this.editedItemIndex,
+          ingredient: newIngredient,
+        })
       );
     }
     // else this.shoppingListService.addIngredient(newIngredient);
     else {
-      this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient))
+      this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
     }
     this.onClear();
   }
@@ -53,7 +62,10 @@ export class ShoppingEditComponent implements OnInit {
   }
 
   onDelete() {
-    this.onClear()
-    this.shoppingListService.deleteIngredients(this.editedItemIndex);
+    this.store.dispatch(
+      new ShoppingListActions.DeleteIngredients(this.editedItemIndex)
+    );
+    this.onClear();
+    // this.shoppingListService.deleteIngredients(this.editedItemIndex);
   }
 }
