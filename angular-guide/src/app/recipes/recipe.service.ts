@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { Ingredient } from '../shared/ingredients.model';
 import * as ShoppingListActions from '../shopping-list/store/shopping-list.action';
-import { AppState } from '../shopping-list/store/shopping-list.reducer';
+import { AppState } from '../store/app.reducer';
 import { Recipe } from './recipe.model';
 
 @Injectable({
