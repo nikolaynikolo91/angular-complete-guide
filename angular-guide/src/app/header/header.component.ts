@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { DataStorageService } from '../shared/data-storage.service';
+import { AppState } from '../store/app.reducer';
 
 @Component({
   selector: 'app-header',
@@ -14,13 +16,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy = new Subject<void>();
   constructor(
     private dataStoreService: DataStorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.authService.user.pipe(takeUntil(this.destroy)).subscribe((user) => {
-      this.isAuthenticated = !!user;
-    });
+    this.store
+      .select('auth')
+      .pipe(
+        takeUntil(this.destroy),
+        map((x) => x.user)
+      )
+      .subscribe((user) => {
+        this.isAuthenticated = !!user;
+      });
   }
 
   onSaveData() {
@@ -31,7 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dataStoreService.fetchRecipesData().subscribe();
   }
 
-  onLogout(){
+  onLogout() {
     this.authService.logout();
   }
 
