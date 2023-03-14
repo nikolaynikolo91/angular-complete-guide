@@ -8,9 +8,9 @@ import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
 import { User } from './user.model';
 
-const BASE_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:';
-const SIGNUP_URL = 'signUp?key=';
-const SIGNIN_URL = 'signInWithPassword?key=';
+export const BASE_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:';
+export const SIGNUP_URL = 'signUp?key=';
+export const SIGNIN_URL = 'signInWithPassword?key=';
 
 const ERROR_MESSAGES: { [key: string]: string } = {
   EMAIL_EXISTS: 'This email exist already',
